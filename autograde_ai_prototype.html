@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoGrade AI - Smart Paper Evaluation</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom drag and drop styling */
+        .drop-zone {
+            transition: all 0.3s ease;
+        }
+        .drop-zone.dragover {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+        }
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm fixed w-full z-50 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-600 text-3xl"></i>
+                    <span class="font-bold text-2xl tracking-tight text-slate-900">AutoGrade AI</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#how-it-works" class="text-slate-600 hover:text-blue-600 font-medium transition">How it Works</a>
+                    <a href="#prototype" class="text-slate-600 hover:text-blue-600 font-medium transition">Try Prototype</a>
+                </div>
+                <div>
+                    <a href="#prototype" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-medium transition shadow-md">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-28 pb-16 md:pt-32 md:pb-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2 flex flex-col items-start text-left">
+                <div class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold mb-4">
+                    Revolutionizing EdTech
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+                    Eliminate grading <br>bottlenecks with <span class="gradient-text">AI Automation</span>
+                </h1>
+                <p class="text-lg text-slate-600 mb-8 max-w-lg">
+                    With extreme student-to-teacher ratios, grading takes hours. AutoGrade AI scans handwritten student papers, matches them against your rubrics using advanced NLP, and delivers instant, accurate evaluations.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#prototype" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition shadow-lg flex items-center gap-2">
+                        Try the Demo <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 relative">
+                <!-- Decorative blob -->
+                <div class="absolute -inset-4 bg-blue-200 rounded-full blur-3xl opacity-50 z-0"></div>
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Student using laptop for education" class="relative z-10 rounded-2xl shadow-2xl object-cover h-[400px] w-full border-4 border-white">
+            </div>
+        </div>
+    </header>
+
+    <!-- How it Works Section -->
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">How AutoGrade AI Works</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">A simple, 3-step process to reclaim your time and provide faster feedback to students.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connecting line for desktop -->
+                <div class="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-blue-100 z-0 border-t-2 border-dashed border-blue-200" style="width: 66%; left: 16.5%;"></div>
+                
+                <!-- Step 1 -->
+                <div class="relative z-10 flex flex-col items-center text-center p-6 bg-slate-50 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div class="w-24 h-24 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl shadow-lg mb-6 border-4 border-white">
+                        <i class="fa-solid fa-file-image"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">1. Upload Papers</h3>
+                    <p class="text-slate-600">Scan or photograph student answer sheets and upload them as images.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 flex flex-col items-center text-center p-6 bg-slate-50 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div class="w-24 h-24 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl shadow-lg mb-6 border-4 border-white">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">2. Provide Key</h3>
+                    <p class="text-slate-600">Upload your answer key or grading rubric as a standard PDF document.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 flex flex-col items-center text-center p-6 bg-slate-50 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div class="w-24 h-24 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl shadow-lg mb-6 border-4 border-white">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">3. AI Evaluation</h3>
+                    <p class="text-slate-600">Our NLP engine extracts text, comprehends meaning, and assigns a score.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prototype Demo Section -->
+    <section id="prototype" class="py-20 bg-blue-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-blue-100">
+                <div class="bg-blue-600 p-6 text-white text-center">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">Interactive Prototype</h2>
+                    <p class="text-blue-100">Test the workflow with simulated AI grading.</p>
+                </div>
+                
+                <div class="p-8 md:p-12">
+                    
+                    <div id="upload-stage" class="block">
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <!-- Student Paper Upload -->
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Student Answer Paper (Image)</label>
+                                <div class="drop-zone border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:bg-slate-50 transition" onclick="document.getElementById('student-file').click()">
+                                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-400 mb-3"></i>
+                                    <p class="text-slate-600 font-medium mb-1">Click to upload or drag & drop</p>
+                                    <p class="text-xs text-slate-400">JPG, PNG up to 10MB</p>
+                                    <input type="file" id="student-file" class="hidden" accept="image/*" onchange="updateFileName('student-file', 'student-file-name')">
+                                    <p id="student-file-name" class="mt-4 text-sm font-semibold text-blue-600 hidden"></p>
+                                </div>
+                            </div>
+
+                            <!-- Answer Key Upload -->
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Answer Key / Rubric (PDF)</label>
+                                <div class="drop-zone border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:bg-slate-50 transition" onclick="document.getElementById('rubric-file').click()">
+                                    <i class="fa-solid fa-file-lines text-4xl text-slate-400 mb-3"></i>
+                                    <p class="text-slate-600 font-medium mb-1">Click to upload or drag & drop</p>
+                                    <p class="text-xs text-slate-400">PDF up to 5MB</p>
+                                    <input type="file" id="rubric-file" class="hidden" accept=".pdf" onchange="updateFileName('rubric-file', 'rubric-file-name')">
+                                    <p id="rubric-file-name" class="mt-4 text-sm font-semibold text-blue-600 hidden"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button id="scan-btn" onclick="startScanning()" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl font-bold text-lg transition shadow-lg w-full md:w-auto">
+                                <i class="fa-solid fa-microchip mr-2"></i> Scan & Grade Paper
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Loading Stage -->
+                    <div id="loading-stage" class="hidden flex-col items-center justify-center py-12 text-center">
+                        <div class="loader mb-6"></div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2">Scanning with NLP...</h3>
+                        <p class="text-slate-500">Extracting handwriting, verifying context against rubric...</p>
+                        
+                        <!-- Progress bar simulation -->
+                        <div class="w-full max-w-md bg-gray-200 rounded-full h-2.5 mt-6 overflow-hidden">
+                            <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Result Stage -->
+                    <div id="result-stage" class="hidden">
+                        <div class="bg-green-50 border border-green-200 rounded-xl p-6 mb-6 flex items-start gap-4">
+                            <div class="text-green-600 mt-1 text-2xl">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-green-900 mb-1">Evaluation Complete!</h3>
+                                <p class="text-green-700 text-sm">Processed in 2.4 seconds using Vision-NLP engine.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <!-- Score Card -->
+                            <div class="md:col-span-1 bg-white border border-slate-200 rounded-xl p-6 text-center shadow-sm flex flex-col justify-center">
+                                <p class="text-slate-500 font-semibold mb-2 uppercase text-xs tracking-wide">Final Score</p>
+                                <div class="text-5xl font-extrabold text-blue-600 mb-2">18<span class="text-2xl text-slate-400">/20</span></div>
+                                <div class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold mt-2">Excellent (90%)</div>
+                            </div>
+
+                            <!-- Feedback Details -->
+                            <div class="md:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                                <h4 class="font-bold text-slate-800 border-b border-slate-100 pb-3 mb-4"><i class="fa-solid fa-comment-dots text-blue-500 mr-2"></i>AI Feedback & Insights</h4>
+                                
+                                <div class="space-y-4">
+                                    <div class="flex gap-3">
+                                        <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                                        <p class="text-slate-600 text-sm"><strong>Strengths:</strong> Great understanding of the core concepts in Question 1. Historical dates were accurate and semantic meaning perfectly aligned with the key.</p>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <i class="fa-solid fa-circle-exclamation text-amber-500 mt-1"></i>
+                                        <p class="text-slate-600 text-sm"><strong>Missed Context:</strong> In Question 2, the student missed one secondary point regarding economic impact as outlined in the PDF rubric (-2 points).</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 pt-4 border-t border-slate-100 flex gap-3">
+                                    <button onclick="resetPrototype()" class="text-blue-600 hover:text-blue-800 text-sm font-semibold transition px-4 py-2 bg-blue-50 hover:bg-blue-100 rounded-lg">
+                                        Grade Another Paper
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                <i class="fa-solid fa-graduation-cap text-blue-500 text-2xl"></i>
+                <span class="font-bold text-xl text-white tracking-tight">AutoGrade AI</span>
+            </div>
+            <p class="mb-6 max-w-md mx-auto">Building the future of smart education for the Startup Buildathon.</p>
+            <p class="text-sm">&copy; 2026 AutoGrade AI Team. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Update file name display when a file is selected
+        function updateFileName(inputId, displayId) {
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            
+            if (input.files && input.files[0]) {
+                display.textContent = 'Selected: ' + input.files[0].name;
+                display.classList.remove('hidden');
+                
+                // Change border color to indicate success visually
+                input.parentElement.classList.add('border-blue-500', 'bg-blue-50');
+                input.parentElement.classList.remove('border-slate-300');
+            }
+        }
+
+        // Handle the Scan process simulation
+        function startScanning() {
+            // Check if user uploaded (Optional strict validation - kept loose for demo)
+            const studentFile = document.getElementById('student-file').files.length > 0;
+            const rubricFile = document.getElementById('rubric-file').files.length > 0;
+            
+            // Proceed to loading stage
+            document.getElementById('upload-stage').classList.add('hidden');
+            document.getElementById('loading-stage').classList.remove('hidden');
+            document.getElementById('loading-stage').classList.add('flex');
+
+            // Simulate Progress Bar
+            let progress = 0;
+            const bar = document.getElementById('progress-bar');
+            
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 20) + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // Small delay after reaching 100% before showing results
+                    setTimeout(() => {
+                        showResults();
+                    }, 500);
+                }
+                bar.style.width = progress + '%';
+            }, 300);
+        }
+
+        // Show the mock results
+        function showResults() {
+            document.getElementById('loading-stage').classList.remove('flex');
+            document.getElementById('loading-stage').classList.add('hidden');
+            
+            document.getElementById('result-stage').classList.remove('hidden');
+            document.getElementById('result-stage').classList.add('block');
+        }
+
+        // Reset prototype state
+        function resetPrototype() {
+            document.getElementById('result-stage').classList.remove('block');
+            document.getElementById('result-stage').classList.add('hidden');
+            
+            document.getElementById('upload-stage').classList.remove('hidden');
+            
+            // Reset file inputs visually
+            ['student-file', 'rubric-file'].forEach(id => {
+                const input = document.getElementById(id);
+                input.value = ''; // Clear actual file
+                
+                const display = document.getElementById(id + '-name');
+                display.textContent = '';
+                display.classList.add('hidden');
+                
+                input.parentElement.classList.remove('border-blue-500', 'bg-blue-50');
+                input.parentElement.classList.add('border-slate-300');
+            });
+            
+            // Reset progress bar
+            document.getElementById('progress-bar').style.width = '0%';
+        }
+    </script>
+</body>
+</html>

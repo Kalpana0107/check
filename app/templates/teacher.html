@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoGrade AI - Teacher Dashboard</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-6">
+                    <a href="/" class="flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-blue-600 text-2xl"></i>
+                        <span class="font-bold text-xl tracking-tight text-slate-900">AutoGrade AI</span>
+                    </a>
+                    <span class="hidden sm:inline-block bg-blue-100 text-blue-700 text-xs px-2.5 py-1 rounded-full font-bold">
+                        <i class="fa-solid fa-chalkboard-user mr-1"></i> Teacher Portal
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="openCreateExamModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-xl font-bold transition shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Create Exam & Master Key
+                    </button>
+
+                    <!-- User Profile & Quick Switch -->
+                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+                        <div class="text-right hidden md:block">
+                            <div id="teacher-name" class="font-bold text-sm text-slate-900">Prof. Sarah Jenkins</div>
+                            <div id="teacher-email" class="text-xs text-slate-400">teacher@autograde.ai</div>
+                        </div>
+                        <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                            SJ
+                        </div>
+                        <button onclick="App.switchRoleDemo('student')" title="Switch to Student View" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1.5 rounded-lg font-medium transition">
+                            <i class="fa-solid fa-repeat mr-1"></i> Student View
+                        </button>
+                        <button onclick="App.logout()" title="Sign Out" class="text-slate-400 hover:text-slate-700 p-1.5 transition">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header & Stats Overview -->
+        <div class="mb-8">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">Evaluation & Exam Command Center</h1>
+                    <p class="text-slate-500 text-xs md:text-sm mt-1">Review student papers, trigger multimodal conceptual grading, and publish verified marks.</p>
+                </div>
+            </div>
+
+            <!-- 4 Metric Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Active Exams</span>
+                        <i class="fa-solid fa-book-open text-blue-500"></i>
+                    </div>
+                    <div id="stat-total-exams" class="text-3xl font-black text-slate-900">--</div>
+                    <div class="text-xs text-slate-400 mt-1">With mapped rubrics</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Total Submissions</span>
+                        <i class="fa-solid fa-file-lines text-indigo-500"></i>
+                    </div>
+                    <div id="stat-total-submissions" class="text-3xl font-black text-slate-900">--</div>
+                    <div class="text-xs text-slate-400 mt-1">Uploaded answer sheets</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Published Results</span>
+                        <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    </div>
+                    <div id="stat-graded-count" class="text-3xl font-black text-emerald-600">--</div>
+                    <div class="text-xs text-slate-400 mt-1">Visible to students</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Class Average</span>
+                        <i class="fa-solid fa-chart-line text-blue-600"></i>
+                    </div>
+                    <div id="stat-avg-score" class="text-3xl font-black text-blue-600">--</div>
+                    <div class="text-xs text-slate-400 mt-1">Across all assessments</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-6 gap-2">
+            <button id="nav-btn-queue" onclick="switchTeacherTab('queue')" class="px-5 py-3 font-bold text-sm border-b-2 border-blue-600 text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-inbox"></i> Submissions & Review Queue
+            </button>
+            <button id="nav-btn-exams" onclick="switchTeacherTab('exams')" class="px-5 py-3 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-folder-tree"></i> My Exams & Answer Keys
+            </button>
+            <button id="nav-btn-analytics" onclick="switchTeacherTab('analytics')" class="px-5 py-3 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie"></i> Class Diagnostics
+            </button>
+        </div>
+
+        <!-- TAB PANE 1: Submissions & Review Queue -->
+        <div id="tab-pane-queue" class="block">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="font-bold text-slate-900 text-base">Student Submissions Queue</h2>
+                        <p class="text-xs text-slate-500">Inspect OCR text, adjust marks, verify conceptual feedback, and publish.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="loadSubmissionsQueue()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-3.5">Student</th>
+                                <th class="px-6 py-3.5">Exam Title & Subject</th>
+                                <th class="px-6 py-3.5">Submitted</th>
+                                <th class="px-6 py-3.5">Evaluated Score</th>
+                                <th class="px-6 py-3.5">Status</th>
+                                <th class="px-6 py-3.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissions-table-body" class="divide-y divide-slate-100">
+                            <!-- Populated dynamically by teacher.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB PANE 2: Exams & Answer Keys -->
+        <div id="tab-pane-exams" class="hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-bold text-slate-900 text-lg">Configured Exams & Chapter Rubrics</h2>
+                <button onclick="openCreateExamModal()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-xl font-bold transition shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus"></i> New Exam
+                </button>
+            </div>
+            <div id="exams-list-container" class="space-y-4">
+                <!-- Populated by teacher.js -->
+            </div>
+        </div>
+
+        <!-- TAB PANE 3: Class Diagnostics -->
+        <div id="tab-pane-analytics" class="hidden">
+            <div id="class-analytics-content">
+                <!-- Populated by teacher.js -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Review & Mark Adjustment Modal -->
+    <div id="review-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-backdrop fixed inset-0" onclick="closeReviewModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 md:p-8 z-10 max-h-[90vh] overflow-y-auto border border-slate-100 animate-scaleIn">
+            <button onclick="closeReviewModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="review-modal-content">
+                <!-- Injected via teacher.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Exam & Answer Key Modal -->
+    <div id="create-exam-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-backdrop fixed inset-0" onclick="closeCreateExamModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 md:p-8 z-10 max-h-[92vh] overflow-y-auto border border-slate-100">
+            <button onclick="closeCreateExamModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-slate-900">Create Exam & Master Answer Key</h3>
+                <p class="text-xs text-slate-500 mt-1">Define questions with chapter tags and model conceptual logic for AI multimodal evaluation.</p>
+            </div>
+
+            <form onsubmit="handleCreateExamSubmit(event)" class="space-y-5">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Subject Name *</label>
+                        <input type="text" id="exam-subject" required placeholder="e.g. Physics, Chemistry, Biology" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Exam Title *</label>
+                        <input type="text" id="exam-title" required placeholder="e.g. Mid-Term Assessment: Thermodynamics" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Exam Description / Syllabus Scope</label>
+                    <input type="text" id="exam-description" placeholder="Chapters 1-4, First & Second Laws of Thermodynamics" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Dynamic Question Builder -->
+                <div class="pt-3 border-t border-slate-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">Question & Chapter Mapping</span>
+                        <button type="button" onclick="addQuestionToBuilder()" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Add Question
+                        </button>
+                    </div>
+
+                    <div id="questions-builder-container">
+                        <!-- Injected by teacher.js -->
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="closeCreateExamModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs hover:bg-slate-50 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition shadow-md flex items-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Save & Publish Exam
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/teacher.js"></script>
+</body>
+</html>
+

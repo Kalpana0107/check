@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoGrade AI - Smart Multimodal Paper Evaluation & Analytics</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-sm fixed w-full z-50 top-0 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="/" class="flex items-center gap-2 group">
+                    <i class="fa-solid fa-graduation-cap text-blue-600 text-3xl group-hover:scale-105 transition-transform"></i>
+                    <span class="font-bold text-2xl tracking-tight text-slate-900">AutoGrade AI</span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#how-it-works" class="text-slate-600 hover:text-blue-600 font-medium transition text-sm">How it Works</a>
+                    <a href="#prototype" class="text-slate-600 hover:text-blue-600 font-medium transition text-sm">Interactive Scanner</a>
+                    <a href="#features" class="text-slate-600 hover:text-blue-600 font-medium transition text-sm">Conceptual Logic Engine</a>
+                </div>
+
+                <div id="nav-auth-container" class="flex items-center gap-3">
+                    <button onclick="openAuthModal('login')" class="text-slate-700 hover:text-blue-600 font-semibold text-sm px-4 py-2 transition">
+                        Sign In
+                    </button>
+                    <button onclick="openAuthModal('signup')" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-medium transition shadow-md text-sm">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2 flex flex-col items-start text-left">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase">
+                        Revolutionizing EdTech
+                    </div>
+                    <div id="system-status-badge" class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold border border-blue-200">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> Multimodal AI Engine Ready
+                    </div>
+                </div>
+
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+                    Eliminate grading <br>bottlenecks with <span class="gradient-text">AI Automation</span>
+                </h1>
+                
+                <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed">
+                    With extreme student-to-teacher ratios, grading takes hours. AutoGrade AI scans handwritten student papers, comprehends <em>conceptual logic and reasoning</em> against your rubrics, and delivers instant, transparent evaluations with chapter analytics.
+                </p>
+
+                <!-- Action CTAs -->
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button onclick="App.switchRoleDemo('teacher')" class="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-full font-semibold transition shadow-lg flex items-center gap-2 group">
+                        <i class="fa-solid fa-chalkboard-user"></i> Teacher Portal <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <button onclick="App.switchRoleDemo('student')" class="bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-200 hover:border-blue-400 px-7 py-3 rounded-full font-semibold transition shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-user-graduate text-blue-600"></i> Student Portal
+                    </button>
+                </div>
+
+                <!-- Quick 1-Click Role Switcher -->
+                <div class="bg-white/80 backdrop-blur-sm p-3.5 rounded-2xl border border-slate-200/80 shadow-sm w-full max-w-lg">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Instant Demo Login:</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="App.switchRoleDemo('teacher')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 px-3 py-1.5 rounded-lg font-semibold transition border border-slate-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-tie text-blue-600"></i> Prof. Sarah Jenkins (Teacher)
+                        </button>
+                        <button onclick="App.switchRoleDemo('student')" class="text-xs bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 px-3 py-1.5 rounded-lg font-semibold transition border border-slate-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-graduation-cap text-emerald-600"></i> Alex Chen (Student)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="md:w-1/2 relative">
+                <!-- Decorative blob -->
+                <div class="absolute -inset-4 bg-blue-200 rounded-full blur-3xl opacity-50 z-0"></div>
+                <div class="relative z-10">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Student using laptop for education" class="rounded-2xl shadow-2xl object-cover h-[400px] w-full border-4 border-white">
+                    
+                    <!-- Floating Stat Badge -->
+                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border border-slate-100 flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+                            <i class="fa-solid fa-check-double"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-400 font-semibold uppercase">Conceptual Accuracy</div>
+                            <div class="text-lg font-extrabold text-slate-900">Semantic & Meaning-Based</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- How it Works Section -->
+    <section id="how-it-works" class="py-20 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">How AutoGrade AI Works</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">A seamless, 3-step multimodal workflow empowering teachers to evaluate faster and students to learn deeper.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connecting line for desktop -->
+                <div class="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-blue-100 z-0 border-t-2 border-dashed border-blue-200" style="width: 66%; left: 16.5%;"></div>
+                
+                <!-- Step 1 -->
+                <div class="relative z-10 flex flex-col items-center text-center p-6 bg-slate-50 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div class="w-24 h-24 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl shadow-lg mb-6 border-4 border-white">
+                        <i class="fa-solid fa-file-image"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">1. Upload Papers</h3>
+                    <p class="text-slate-600 text-sm">Students scan or photograph handwritten answer sheets from home and upload as images or PDF.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 flex flex-col items-center text-center p-6 bg-slate-50 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div class="w-24 h-24 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl shadow-lg mb-6 border-4 border-white">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">2. Provide Model Key</h3>
+                    <p class="text-slate-600 text-sm">Teachers define questions with chapter tags, max marks, model concepts, and grading criteria.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 flex flex-col items-center text-center p-6 bg-slate-50 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition">
+                    <div class="w-24 h-24 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl shadow-lg mb-6 border-4 border-white">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">3. Conceptual AI Grading</h3>
+                    <p class="text-slate-600 text-sm">Multimodal AI extracts handwriting, evaluates conceptual logic, and outputs diagnostic growth analytics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prototype Demo Section -->
+    <section id="prototype" class="py-20 bg-blue-50/60">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-blue-100">
+                <div class="bg-blue-600 p-6 text-white text-center">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">Interactive AI Grading Scanner</h2>
+                    <p class="text-blue-100 text-sm">Test the multimodal handwriting OCR & conceptual grading workflow live.</p>
+                </div>
+                
+                <div class="p-8 md:p-12">
+                    
+                    <div id="upload-stage" class="block">
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <!-- Student Paper Upload -->
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Student Answer Paper (Image)</label>
+                                <div class="drop-zone border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:bg-slate-50 transition" onclick="document.getElementById('student-file').click()">
+                                    <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-400 mb-3"></i>
+                                    <p class="text-slate-600 font-medium mb-1">Click to upload or drag & drop</p>
+                                    <p class="text-xs text-slate-400">JPG, PNG up to 10MB</p>
+                                    <input type="file" id="student-file" class="hidden" accept="image/*">
+                                    <p id="student-file-name" class="mt-4 text-sm font-semibold text-blue-600 hidden"></p>
+                                </div>
+                            </div>
+
+                            <!-- Answer Key Upload -->
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-2">Answer Key / Rubric (PDF)</label>
+                                <div class="drop-zone border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:bg-slate-50 transition" onclick="document.getElementById('rubric-file').click()">
+                                    <i class="fa-solid fa-file-lines text-4xl text-slate-400 mb-3"></i>
+                                    <p class="text-slate-600 font-medium mb-1">Click to upload or drag & drop</p>
+                                    <p class="text-xs text-slate-400">PDF or Text Rubric</p>
+                                    <input type="file" id="rubric-file" class="hidden" accept=".pdf">
+                                    <p id="rubric-file-name" class="mt-4 text-sm font-semibold text-blue-600 hidden"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center space-y-4">
+                            <button id="scan-btn" onclick="startScanning()" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl font-bold text-lg transition shadow-lg w-full md:w-auto">
+                                <i class="fa-solid fa-microchip mr-2"></i> Scan & Grade Paper
+                            </button>
+                            <p class="text-xs text-slate-400">Works with or without custom file upload using our physics benchmark paper.</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading Stage -->
+                    <div id="loading-stage" class="hidden flex-col items-center justify-center py-12 text-center">
+                        <div class="loader mb-6"></div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2">Scanning with Multimodal AI...</h3>
+                        <p class="text-slate-500 text-sm">Transcribing handwriting, verifying physical causality against model rubric...</p>
+                        
+                        <!-- Progress bar -->
+                        <div class="w-full max-w-md bg-gray-200 rounded-full h-2.5 mt-6 overflow-hidden">
+                            <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Result Stage -->
+                    <div id="result-stage" class="hidden">
+                        <div class="bg-green-50 border border-green-200 rounded-xl p-6 mb-6 flex items-start gap-4">
+                            <div class="text-green-600 mt-1 text-2xl">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-green-900 mb-1">Conceptual Evaluation Complete!</h3>
+                                <p class="text-green-700 text-sm">Evaluated across 4 mapped chapters with semantic logic extraction.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-6 mb-6">
+                            <!-- Score Card -->
+                            <div class="md:col-span-1 bg-white border border-slate-200 rounded-xl p-6 text-center shadow-sm flex flex-col justify-center">
+                                <p class="text-slate-500 font-semibold mb-2 uppercase text-xs tracking-wide">Evaluated Score</p>
+                                <div class="text-5xl font-extrabold text-blue-600 mb-2">17.5<span class="text-2xl text-slate-400">/20</span></div>
+                                <div class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold mt-2">Excellent (87.5%)</div>
+                            </div>
+
+                            <!-- Feedback Details -->
+                            <div class="md:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                                <h4 class="font-bold text-slate-800 border-b border-slate-100 pb-3 mb-4"><i class="fa-solid fa-comment-dots text-blue-500 mr-2"></i>AI Conceptual Insights & Breakdown</h4>
+                                
+                                <div class="space-y-4 text-sm">
+                                    <div class="flex gap-3">
+                                        <i class="fa-solid fa-check text-green-500 mt-1"></i>
+                                        <p class="text-slate-600"><strong>Thermodynamics (Q1):</strong> Correctly applied First Law of Thermodynamics (<code class="text-blue-600">dU = -dW</code>). Awarded full credit for deriving work done from internal energy reduction.</p>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <i class="fa-solid fa-circle-exclamation text-amber-500 mt-1"></i>
+                                        <p class="text-slate-600"><strong>Harmonic Motion (Q4):</strong> Intuitive qualitative description of underdamped and overdamped motion was credited, but boundary condition roots were omitted (-1.5 marks).</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-3">
+                                    <button onclick="resetPrototype()" class="text-slate-600 hover:text-slate-800 text-sm font-semibold transition px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg">
+                                        Grade Another Paper
+                                    </button>
+                                    <button onclick="App.switchRoleDemo('student')" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition px-4 py-2 rounded-lg flex items-center gap-1.5 shadow-sm">
+                                        <i class="fa-solid fa-chart-line"></i> Open in Student Dashboard
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 mb-3">Why Conceptual AI Beats Keyword Matching</h2>
+                <p class="text-slate-600 max-w-xl mx-auto text-sm">Standard grading software looks for exact keywords. AutoGrade AI understands the underlying scientific logic.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg mb-2">Alternative Valid Proofs</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Students who derive solutions via alternative mathematical paths or intuitive logic receive full credit, even without textbook buzzwords.</p>
+                </div>
+
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg mb-2">Teacher-in-the-Loop Override</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Teachers maintain absolute grading authority. Inspect AI recommendations, tweak marks with 1 click, and publish verified results.</p>
+                </div>
+
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-blue-200 transition">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg mb-2">Scope of Improvement Analytics</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Instead of just a final grade, students receive diagnostic chapter maps highlighting exact conceptual gaps where marks were lost.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-center items-center gap-2 mb-4">
+                <i class="fa-solid fa-graduation-cap text-blue-500 text-2xl"></i>
+                <span class="font-bold text-xl text-white tracking-tight">AutoGrade AI</span>
+            </div>
+            <p class="mb-6 max-w-md mx-auto text-sm">Building the future of smart, conceptual education evaluation for hackathons and classroom scale.</p>
+            <div class="flex justify-center gap-4 text-xs mb-4">
+                <a href="/teacher" class="hover:text-white transition">Teacher Portal</a>
+                <span>&bull;</span>
+                <a href="/student" class="hover:text-white transition">Student Portal</a>
+            </div>
+            <p class="text-xs">&copy; 2026 AutoGrade AI Team. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Auth Modal (Login / Signup) -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-backdrop fixed inset-0" onclick="closeAuthModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 z-10 border border-slate-100 animate-scaleIn">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-600 text-2xl"></i>
+                    <span class="font-bold text-xl text-slate-900">AutoGrade AI</span>
+                </div>
+                <p class="text-xs text-slate-500">Sign in to access your Teacher or Student Dashboard</p>
+            </div>
+
+            <!-- Tab switcher -->
+            <div class="flex border-b border-slate-200 mb-6">
+                <button id="tab-btn-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-center font-semibold text-blue-600 border-b-2 border-blue-600 text-sm transition">
+                    Sign In
+                </button>
+                <button id="tab-btn-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-center font-medium text-slate-500 hover:text-slate-800 text-sm transition">
+                    Create Account
+                </button>
+            </div>
+
+            <!-- Quick 1-Click Demo Buttons -->
+            <div class="bg-blue-50/70 p-3 rounded-xl border border-blue-100 mb-5">
+                <div class="text-xs font-bold text-blue-900 mb-1.5 flex items-center gap-1">
+                    <i class="fa-solid fa-bolt text-blue-600"></i> 1-Click Instant Demo Access:
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="App.switchRoleDemo('teacher')" class="bg-white hover:bg-blue-50 text-slate-700 text-xs py-2 px-3 rounded-lg border border-slate-200 font-semibold shadow-xs flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user-tie text-blue-600"></i> Teacher
+                    </button>
+                    <button type="button" onclick="App.switchRoleDemo('student')" class="bg-white hover:bg-blue-50 text-slate-700 text-xs py-2 px-3 rounded-lg border border-slate-200 font-semibold shadow-xs flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user-graduate text-emerald-600"></i> Student
+                    </button>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="modal-login-form" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+                    <input type="email" id="login-email" required placeholder="teacher@autograde.ai or alex@student.edu" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow-md text-sm">
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="modal-signup-form" onsubmit="handleSignupSubmit(event)" class="hidden space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+                    <input type="text" id="signup-name" required placeholder="e.g. Prof. Alan Turing" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+                    <input type="email" id="signup-email" required placeholder="you@university.edu" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="signup-password" required placeholder="••••••••" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">I am a...</label>
+                    <select id="signup-role" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 font-medium">
+                        <option value="student">Student (Submit papers & view analytics)</option>
+                        <option value="teacher">Teacher (Create rubrics & evaluate exams)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow-md text-sm">
+                    Create Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/landing.js"></script>
+</body>
+</html>
+
