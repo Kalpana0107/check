@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 
 from app.config import settings
 from app.database import engine, Base
@@ -39,6 +39,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    import traceback
+    error_trace = traceback.format_exc()
+    print(f"[AutoGrade Error] Unhandled Exception: {error_trace}")
+    return HTMLResponse(
+        content=f"<html><body style='font-family:sans-serif;padding:2rem;'><h2>Application Error</h2><pre style='background:#f1f5f9;padding:1rem;border-radius:8px;'>{error_trace}</pre></body></html>",
+        status_code=500
+    )
+
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
@@ -72,15 +82,15 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 # Frontend Page Routes
 @app.get("/")
 def home_page(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.get("/teacher")
 def teacher_page(request: Request):
-    return templates.TemplateResponse("teacher.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="teacher.html")
 
 @app.get("/student")
 def student_page(request: Request):
-    return templates.TemplateResponse("student.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="student.html")
 
 @app.get("/api/health")
 def health_check():
