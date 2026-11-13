@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoGrade AI - Student Dashboard & Growth Analytics</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js for Growth Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <nav class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-6">
+                    <a href="/" class="flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-blue-600 text-2xl"></i>
+                        <span class="font-bold text-xl tracking-tight text-slate-900">AutoGrade AI</span>
+                    </a>
+                    <span class="hidden sm:inline-block bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold">
+                        <i class="fa-solid fa-user-graduate mr-1"></i> Student Portal
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="switchStudentTab('upload')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-xl font-bold transition shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Submit Answer Paper
+                    </button>
+
+                    <!-- User Profile & Quick Switch -->
+                    <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+                        <div class="text-right hidden md:block">
+                            <div id="student-name" class="font-bold text-sm text-slate-900">Alex Chen</div>
+                            <div id="student-email" class="text-xs text-slate-400">alex@student.edu</div>
+                        </div>
+                        <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                            AC
+                        </div>
+                        <button onclick="App.switchRoleDemo('teacher')" title="Switch to Teacher View" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1.5 rounded-lg font-medium transition">
+                            <i class="fa-solid fa-repeat mr-1"></i> Teacher View
+                        </button>
+                        <button onclick="App.logout()" title="Sign Out" class="text-slate-400 hover:text-slate-700 p-1.5 transition">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header & Stats Overview -->
+        <div class="mb-8">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900">My Learning & Growth Dashboard</h1>
+                    <p class="text-slate-500 text-xs md:text-sm mt-1">Track your conceptual performance, view evaluated exam breakdowns, and bridge knowledge gaps.</p>
+                </div>
+            </div>
+
+            <!-- 4 Metric Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Exams Evaluated</span>
+                        <i class="fa-solid fa-file-circle-check text-blue-500"></i>
+                    </div>
+                    <div id="stat-total-exams" class="text-3xl font-black text-slate-900">--</div>
+                    <div class="text-xs text-slate-400 mt-1">Submitted from home</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Average Score</span>
+                        <i class="fa-solid fa-chart-line text-emerald-500"></i>
+                    </div>
+                    <div id="stat-avg-score" class="text-3xl font-black text-emerald-600">--</div>
+                    <div class="text-xs text-slate-400 mt-1">Conceptual proficiency</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Top Strength</span>
+                        <i class="fa-solid fa-award text-amber-500"></i>
+                    </div>
+                    <div id="stat-top-chapter" class="text-lg font-bold text-slate-900 truncate">--</div>
+                    <div class="text-xs text-slate-400 mt-1">High mastery topic</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-400 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Growth Focus</span>
+                        <i class="fa-solid fa-bullseye text-indigo-500"></i>
+                    </div>
+                    <div id="stat-weak-count" class="text-3xl font-black text-blue-600">--</div>
+                    <div class="text-xs text-slate-400 mt-1">Chapters with scope to improve</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-6 gap-2">
+            <button id="nav-btn-reports" onclick="switchStudentTab('reports')" class="px-5 py-3 font-bold text-sm border-b-2 border-blue-600 text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-file-lines"></i> Evaluated Report Cards
+            </button>
+            <button id="nav-btn-upload" onclick="switchStudentTab('upload')" class="px-5 py-3 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Upload Answer Sheet
+            </button>
+            <button id="nav-btn-growth" onclick="switchStudentTab('growth')" class="px-5 py-3 font-medium text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie"></i> Growth & Improvement Analytics
+            </button>
+        </div>
+
+        <!-- TAB PANE 1: Evaluated Report Cards -->
+        <div id="tab-pane-reports" class="block">
+            <div id="submissions-list-container" class="space-y-4">
+                <!-- Injected dynamically by student.js -->
+            </div>
+        </div>
+
+        <!-- TAB PANE 2: Upload Answer Sheet -->
+        <div id="tab-pane-upload" class="hidden">
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+                        <i class="fa-solid fa-file-arrow-up"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">Submit Completed Answer Paper</h2>
+                    <p class="text-xs text-slate-500 mt-1">Upload photos or scanned PDF of your handwritten work for instant multimodal evaluation.</p>
+                </div>
+
+                <div id="upload-form-container">
+                    <form onsubmit="handleStudentUploadSubmit(event)" class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">Select Active Exam *</label>
+                            <select id="select-exam" required class="w-full text-sm p-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium">
+                                <option value="">Loading exams...</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">Upload Handwritten Answer Paper (Image or PDF) *</label>
+                            <div class="drop-zone border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:bg-slate-50 transition" onclick="document.getElementById('student-upload-file').click()">
+                                <i class="fa-solid fa-camera text-3xl text-slate-400 mb-2"></i>
+                                <p class="text-slate-700 font-semibold text-sm mb-0.5">Click to browse or drag & drop</p>
+                                <p class="text-xs text-slate-400">Supports JPG, PNG, PDF up to 15MB</p>
+                                <input type="file" id="student-upload-file" class="hidden" accept="image/*,.pdf" required>
+                                <p id="student-file-selected-name" class="mt-3 text-xs font-bold text-blue-600 hidden"></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50/70 p-4 rounded-xl border border-blue-100 text-xs text-slate-600 flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-info text-blue-600 mt-0.5"></i>
+                            <div>
+                                <strong>How Grading Works:</strong> Multimodal AI transcribes your handwriting and awards credit based on <em>conceptual correctness and physical logic</em>, even if your explanations use alternative derivations.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg flex items-center justify-center gap-2 text-sm">
+                            <i class="fa-solid fa-microchip"></i> Submit for Multimodal AI Grading
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Loading / Evaluation Progress Stage -->
+                <div id="upload-loading-container" class="hidden flex-col items-center justify-center py-10 text-center">
+                    <div class="loader mb-4"></div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">Evaluating Your Answer Paper...</h3>
+                    <p class="text-xs text-slate-500 max-w-sm">Performing multimodal OCR on handwritten equations, verifying conceptual causality against teacher rubric...</p>
+                    
+                    <div class="w-full max-w-sm bg-slate-100 rounded-full h-2.5 mt-6 overflow-hidden">
+                        <div id="upload-progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 10%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB PANE 3: Growth & Improvement Analytics -->
+        <div id="tab-pane-growth" class="hidden">
+            <!-- Score Trends Chart Card -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">Score Trends Across Exams Over Time</h3>
+                        <p class="text-xs text-slate-500">Historical performance trajectory across subjects</p>
+                    </div>
+                    <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full border border-blue-200">
+                        <i class="fa-solid fa-chart-line mr-1"></i> Continuous Growth Tracking
+                    </span>
+                </div>
+                <div class="h-64 w-full">
+                    <canvas id="score-trends-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Scope of Improvement Table Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-blue-600"></i> Scope of Improvement by Chapter / Topic
+                        </h3>
+                        <p class="text-xs text-slate-500">Prioritized breakdown highlighting where marks were lost and targeted actions to bridge understanding.</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider font-semibold border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-3.5">Chapter / Topic</th>
+                                <th class="px-6 py-3.5">Marks Earned</th>
+                                <th class="px-6 py-3.5">Accuracy</th>
+                                <th class="px-6 py-3.5">Lost Marks (Headroom)</th>
+                                <th class="px-6 py-3.5">Priority</th>
+                                <th class="px-6 py-3.5">Recommended Pedagogical Focus</th>
+                            </tr>
+                        </thead>
+                        <tbody id="improvement-table-body" class="divide-y divide-slate-100">
+                            <!-- Populated dynamically by student.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Personalized Recommendations Card -->
+            <div id="personalized-tips-container">
+                <!-- Populated dynamically by student.js -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Report Card Modal -->
+    <div id="report-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-backdrop fixed inset-0" onclick="closeReportModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 md:p-8 z-10 max-h-[92vh] overflow-y-auto border border-slate-100 animate-scaleIn">
+            <button onclick="closeReportModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="report-modal-content">
+                <!-- Injected via student.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/student.js"></script>
+</body>
+</html>
+
