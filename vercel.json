@@ -3,6 +3,7 @@
   "functions": {
     "api/index.py": {
       "includeFiles": [
+        "templates/**",
         "app/**",
         "autograde.db"
       ]

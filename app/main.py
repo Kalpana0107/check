@@ -45,16 +45,18 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
-# Fallback: check CWD / app / templates if __file__ based resolution misses on serverless
+# Fallback: check CWD templates, CWD app templates if __file__ based resolution misses on serverless
 if not TEMPLATES_DIR.exists():
-    cwd_templates = Path.cwd() / "app" / "templates"
-    if cwd_templates.exists():
-        TEMPLATES_DIR = cwd_templates
+    for candidate in [Path.cwd() / "templates", Path.cwd() / "app" / "templates"]:
+        if candidate.exists():
+            TEMPLATES_DIR = candidate
+            break
 
 if not STATIC_DIR.exists():
-    cwd_static = Path.cwd() / "app" / "static"
-    if cwd_static.exists():
-        STATIC_DIR = cwd_static
+    for candidate in [Path.cwd() / "public" / "static", Path.cwd() / "static", Path.cwd() / "app" / "static"]:
+        if candidate.exists():
+            STATIC_DIR = candidate
+            break
 
 try:
     STATIC_DIR.mkdir(parents=True, exist_ok=True)
