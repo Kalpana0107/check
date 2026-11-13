@@ -8,7 +8,33 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 try:
-    from app.main import app
+    from app.main import app as raw_app
+
+    class VercelPathMiddleware:
+        """
+        ASGI middleware to normalize Vercel's rewrite path.
+        When Vercel rewrites requests to /api/index.py, this restores
+        the actual original requested path (e.g. /, /teacher, /student).
+        """
+        def __init__(self, app):
+            self.app = app
+
+        async def __call__(self, scope, receive, send):
+            if scope["type"] == "http":
+                headers = dict(scope.get("headers", []))
+                matched_path = headers.get(b"x-matched-path", b"").decode("utf-8")
+                
+                if matched_path and matched_path != "/api/index.py":
+                    scope["path"] = matched_path
+                elif scope.get("path", "").startswith("/api/index.py"):
+                    remainder = scope["path"][len("/api/index.py"):]
+                    scope["path"] = remainder if remainder else "/"
+                elif scope.get("path") in ["/api", "/api/"]:
+                    scope["path"] = "/"
+            await self.app(scope, receive, send)
+
+    app = VercelPathMiddleware(raw_app)
+
 except Exception as e:
     # Diagnostic fallback: If main app fails to import on Vercel,
     # display the exact Python traceback in the browser instead of opaque 500 error

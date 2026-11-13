@@ -86,6 +86,9 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # Frontend Page Routes
 @app.get("/")
+@app.get("/api/index.py")
+@app.get("/api")
+@app.get("/api/")
 def home_page(request: Request):
     index_file = TEMPLATES_DIR / "index.html"
     if index_file.exists():
@@ -93,6 +96,8 @@ def home_page(request: Request):
     return HTMLResponse(f"<h3>AutoGrade AI</h3><p>Template not found at {TEMPLATES_DIR}. Checking directory...</p>")
 
 @app.get("/teacher")
+@app.get("/api/index.py/teacher")
+@app.get("/api/teacher")
 def teacher_page(request: Request):
     teacher_file = TEMPLATES_DIR / "teacher.html"
     if teacher_file.exists():
@@ -100,6 +105,8 @@ def teacher_page(request: Request):
     return HTMLResponse(f"<h3>Teacher Portal</h3><p>Template not found at {TEMPLATES_DIR}.</p>")
 
 @app.get("/student")
+@app.get("/api/index.py/student")
+@app.get("/api/student")
 def student_page(request: Request):
     student_file = TEMPLATES_DIR / "student.html"
     if student_file.exists():
