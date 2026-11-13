@@ -24,11 +24,19 @@ class Settings:
         # Vercel serverless filesystem is read-only except for /tmp
         _tmp_db = Path("/tmp/autograde.db")
         _src_db = BASE_DIR / "autograde.db"
-        if not _tmp_db.exists() and _src_db.exists():
-            try:
-                shutil.copy2(_src_db, _tmp_db)
-            except Exception as e:
-                print(f"[Vercel] Warning copying pre-seeded database to /tmp: {e}")
+        if not _tmp_db.exists():
+            if _src_db.exists():
+                try:
+                    shutil.copy2(_src_db, _tmp_db)
+                except Exception as e:
+                    print(f"[Vercel] Warning copying pre-seeded database to /tmp: {e}")
+            else:
+                _cwd_db = Path.cwd() / "autograde.db"
+                if _cwd_db.exists():
+                    try:
+                        shutil.copy2(_cwd_db, _tmp_db)
+                    except Exception as e:
+                        print(f"[Vercel] Warning copying CWD db to /tmp: {e}")
 
         # If user explicitly provided a remote database (Postgres, Supabase, Neon), use it.
         # Otherwise, use the writable /tmp SQLite database.

@@ -16,14 +16,6 @@ try:
 except Exception as e:
     print(f"Database table initialization warning: {e}")
 
-# If on Vercel and DB has no teacher yet, run seed
-if bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME")):
-    try:
-        from seed_data import seed
-        seed()
-    except Exception as e:
-        print(f"Auto-seed warning on Vercel: {e}")
-
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="AI-Powered Online Exam Checking and Student Conceptual Analytics Platform",
@@ -53,6 +45,17 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
+# Fallback: check CWD / app / templates if __file__ based resolution misses on serverless
+if not TEMPLATES_DIR.exists():
+    cwd_templates = Path.cwd() / "app" / "templates"
+    if cwd_templates.exists():
+        TEMPLATES_DIR = cwd_templates
+
+if not STATIC_DIR.exists():
+    cwd_static = Path.cwd() / "app" / "static"
+    if cwd_static.exists():
+        STATIC_DIR = cwd_static
+
 try:
     STATIC_DIR.mkdir(parents=True, exist_ok=True)
     (STATIC_DIR / "uploads").mkdir(parents=True, exist_ok=True)
@@ -76,21 +79,32 @@ async def get_uploaded_file(filename: str):
         return FileResponse(str(static_path))
     raise HTTPException(status_code=404, detail="File not found")
 
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+if STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # Frontend Page Routes
 @app.get("/")
 def home_page(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    index_file = TEMPLATES_DIR / "index.html"
+    if index_file.exists():
+        return templates.TemplateResponse(request=request, name="index.html")
+    return HTMLResponse(f"<h3>AutoGrade AI</h3><p>Template not found at {TEMPLATES_DIR}. Checking directory...</p>")
 
 @app.get("/teacher")
 def teacher_page(request: Request):
-    return templates.TemplateResponse(request=request, name="teacher.html")
+    teacher_file = TEMPLATES_DIR / "teacher.html"
+    if teacher_file.exists():
+        return templates.TemplateResponse(request=request, name="teacher.html")
+    return HTMLResponse(f"<h3>Teacher Portal</h3><p>Template not found at {TEMPLATES_DIR}.</p>")
 
 @app.get("/student")
 def student_page(request: Request):
-    return templates.TemplateResponse(request=request, name="student.html")
+    student_file = TEMPLATES_DIR / "student.html"
+    if student_file.exists():
+        return templates.TemplateResponse(request=request, name="student.html")
+    return HTMLResponse(f"<h3>Student Portal</h3><p>Template not found at {TEMPLATES_DIR}.</p>")
 
 @app.get("/api/health")
 def health_check():
