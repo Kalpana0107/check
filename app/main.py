@@ -45,6 +45,12 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
+try:
+    STATIC_DIR.mkdir(parents=True, exist_ok=True)
+    (STATIC_DIR / "uploads").mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
+
 # Fallback: check CWD templates, CWD app templates if __file__ based resolution misses on serverless
 if not TEMPLATES_DIR.exists():
     for candidate in [Path.cwd() / "templates", Path.cwd() / "app" / "templates"]:
@@ -123,4 +129,9 @@ def health_check():
         "gemini_ready": bool(settings.GEMINI_API_KEY)
     }
 
+<<<<<<< HEAD
+=======
+# Vercel ASGI handler
+handler = app
+>>>>>>> 44d1106c83eb91c722aae7a2534784687a859d80
 
