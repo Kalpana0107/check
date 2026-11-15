@@ -30,8 +30,11 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 TEMPLATES_DIR = BASE_DIR / "templates"
 
-STATIC_DIR.mkdir(parents=True, exist_ok=True)
-(STATIC_DIR / "uploads").mkdir(parents=True, exist_ok=True)
+try:
+    STATIC_DIR.mkdir(parents=True, exist_ok=True)
+    (STATIC_DIR / "uploads").mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
@@ -62,4 +65,7 @@ def health_check():
         "app": settings.PROJECT_NAME,
         "gemini_ready": bool(settings.GEMINI_API_KEY)
     }
+
+# Vercel ASGI handler
+handler = app
 
