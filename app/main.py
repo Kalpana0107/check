@@ -129,9 +129,6 @@ def health_check():
         "gemini_ready": bool(settings.GEMINI_API_KEY)
     }
 
-<<<<<<< HEAD
-=======
 # Vercel ASGI handler
 handler = app
->>>>>>> 44d1106c83eb91c722aae7a2534784687a859d80
 

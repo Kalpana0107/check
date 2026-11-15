@@ -9,3 +9,5 @@ ENV/
 .venv/
 .pytest_cache/
 .env
+.vercel
+.env*
